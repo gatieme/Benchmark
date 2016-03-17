@@ -52,7 +52,7 @@ GL_LIBS = -lGL -lXext -lX11
 # COMPILER CONFIGURATION: Set "CC" to the name of the compiler to use
 # to build the binary benchmarks.  You should also set "$cCompiler" in the
 # Run script to the name of the compiler you want to test.
-CC=arm-linux-gcc
+CC=gcc
 
 # OPTIMISATION SETTINGS:
 
@@ -260,51 +260,79 @@ $(PROGDIR)/ubgears: $(SRCDIR)/ubgears.c
 
 # Individual programs
 asm:
-	$(CC) -o $(PROGDIR)/arithoh.s ${CFLAGS} ${OPTON} -Darithoh -S $(SRCDIR)/arith.c
+$(PROGDIR)/arithoh.s:	$(SRCDIR)/arith.c
+	$(CC) -S $(PROGDIR)/arithoh.s ${CFLAGS} ${OPTON} -Darithoh $(SRCDIR)/arith.c
 
-	$(CC) -o $(PROGDIR)/register.s ${CFLAGS} ${OPTON} -Ddatum='register int' -S $(SRCDIR)/arith.c
+$(PROGDIR)/register.s: $(SRCDIR)/arith.c
+	$(CC) -S $(PROGDIR)/register.s ${CFLAGS} ${OPTON} -Ddatum='register int' $(SRCDIR)/arith.c
 
-	$(CC) -o $(PROGDIR)/short.s ${CFLAGS} ${OPTON} -Ddatum=short -S $(SRCDIR)/arith.c
+$(PROGDIR)/short.s: $(SRCDIR)/arith.c
+	$(CC) -S $(PROGDIR)/short.s ${CFLAGS} ${OPTON} -Ddatum=short $(SRCDIR)/arith.c
 
-	$(CC) -o $(PROGDIR)/int.s ${CFLAGS} ${OPTON} -Ddatum=int -S $(SRCDIR)/arith.c
+$(PROGDIR)/int.s: $(SRCDIR)/arith.c
+	$(CC) -S $(PROGDIR)/int.s ${CFLAGS} ${OPTON} -Ddatum=int $(SRCDIR)/arith.c
 
-	$(CC) -o $(PROGDIR)/long.s ${CFLAGS} ${OPTON} -Ddatum=long -S $(SRCDIR)/arith.c
+$(PROGDIR)/long.s: $(SRCDIR)/arith.c
+	$(CC) -S $(PROGDIR)/long.s ${CFLAGS} ${OPTON} -Ddatum=long $(SRCDIR)/arith.c
 
-	$(CC) -o $(PROGDIR)/float.s ${CFLAGS} ${OPTON} -Ddatum=float -S $(SRCDIR)/arith.c
+$(PROGDIR)/float.s: $(SRCDIR)/arith.c
+	$(CC) -S $(PROGDIR)/float.s ${CFLAGS} ${OPTON} -Ddatum=float $(SRCDIR)/arith.c
 
-	$(CC) -o $(PROGDIR)/double.s ${CFLAGS} ${OPTON} -Ddatum=double -S $(SRCDIR)/arith.c
+$(PROGDIR)/double.s: $(SRCDIR)/arith.c
+	$(CC) -S $(PROGDIR)/double.s ${CFLAGS} ${OPTON} -Ddatum=double $(SRCDIR)/arith.c
 
-	$(CC) -o $(PROGDIR)/whetstone-double.s ${CFLAGS} ${OPTON} -DDP -DUNIX -DUNIXBENCH -S $(SRCDIR)/whets.c -lm
+$(PROGDIR)/whetstone-double.s: $(SRCDIR)/whets.c
+	$(CC) -S $(PROGDIR)/whetstone-double.s ${CFLAGS} ${OPTON} -DDP -DUNIX -DUNIXBENCH $(SRCDIR)/whets.c -lm
 
-	$(CC) -o $(PROGDIR)/hanoi.s ${CFLAGS} ${OPTON} -S $(SRCDIR)/hanoi.c
+$(PROGDIR)/hanoi.s: $(SRCDIR)/hanoi.c
+	$(CC) -S $(PROGDIR)/hanoi.s ${CFLAGS} ${OPTON} $(SRCDIR)/hanoi.c
 
-	#$(CC) -DHAS_POLL -DUNIXBENCH -o $(PROGDIR)/poll.s -S ${CFLAGS} ${OPTON} $(SRCDIR)/time-polling.c
 
-	#$(CC) -DHAS_POLL2 -DUNIXBENCH -o $(PROGDIR)/poll2.s ${CFLAGS} ${OPTON} -S $(SRCDIR)/time-polling.c
+$(PROGDIR)/poll.s: $(SRCDIR)/time-polling.c
+	$(CC) -DHAS_POLL -DUNIXBENCH -o $(PROGDIR)/poll.s ${CFLAGS} ${OPTON} $(SRCDIR)/time-polling.c
 
-	#$(CC) -DHAS_SELECT -DUNIXBENCH -o $(PROGDIR)/select.s ${CFLAGS} ${OPTON} -S $(SRCDIR)/time-polling.c
 
-	$(CC) -o $(PROGDIR)/fstime.s ${CFLAGS} ${OPTON} -S $(SRCDIR)/fstime.c
+$(PROGDIR)/poll2.s: $(SRCDIR)/time-polling.c
+	$(CC) -DHAS_POLL2 -DUNIXBENCH -o $(PROGDIR)/poll2.s ${CFLAGS} ${OPTON} $(SRCDIR)/time-polling.c
 
-	$(CC) -o $(PROGDIR)/syscall.s ${CFLAGS} ${OPTON} -S $(SRCDIR)/syscall.c
+$(PROGDIR)/select.s: $(SRCDIR)/time-polling.c
+	$(CC) -DHAS_SELECT -DUNIXBENCH -o $(PROGDIR)/select.s ${CFLAGS} ${OPTON} $(SRCDIR)/time-polling.c
 
-	$(CC) -o $(PROGDIR)/context1.s ${CFLAGS} ${OPTON} -S $(SRCDIR)/context1.c
+$(PROGDIR)/fstime.s: $(SRCDIR)/fstime.c
+	$(CC) -o $(PROGDIR)/fstime.s ${CFLAGS} ${OPTON} $(SRCDIR)/fstime.c
 
-	$(CC) -o $(PROGDIR)/pipe.s ${CFLAGS} ${OPTON} -S $(SRCDIR)/pipe.c
+$(PROGDIR)/syscall.s: $(SRCDIR)/syscall.c
+	$(CC) -o $(PROGDIR)/syscall.s ${CFLAGS} ${OPTON} $(SRCDIR)/syscall.c
 
-	$(CC) -o $(PROGDIR)/spawn.s ${CFLAGS} ${OPTON} -S $(SRCDIR)/spawn.c
+$(PROGDIR)/context1.s: $(SRCDIR)/context1.c
+	$(CC) -o $(PROGDIR)/context1.s ${CFLAGS} ${OPTON} $(SRCDIR)/context1.c
 
-	$(CC) -o $(PROGDIR)/execl.s ${CFLAGS} ${OPTON} -S $(SRCDIR)/execl.c
+$(PROGDIR)/pipe.s: $(SRCDIR)/pipe.c
+	$(CC) -o $(PROGDIR)/pipe.s ${CFLAGS} ${OPTON} $(SRCDIR)/pipe.c
 
-	cd $(SRCDIR); $(CC)  ${CFLAGS} -DHZ=${HZ} ${OPTON} -S dhry_1.c
-	cd $(SRCDIR); $(CC)  ${CFLAGS} -DHZ=${HZ} ${OPTON} -S dhry_2.c
+$(PROGDIR)/spawn.s: $(SRCDIR)/spawn.c
+	$(CC) -o $(PROGDIR)/spawn.s ${CFLAGS} ${OPTON} $(SRCDIR)/spawn.c
 
-	cd $(SRCDIR); $(CC) ${CFLAGS} -DREG=register -DHZ=${HZ} ${OPTON} -S dhry_1.c
-	cd $(SRCDIR); $(CC)  ${CFLAGS} -DREG=register -DHZ=${HZ} ${OPTON} -S dhry_2.c
+$(PROGDIR)/execl.s: $(SRCDIR)/execl.c $(SRCDIR)/big.c
+	$(CC) -o $(PROGDIR)/execl.s ${CFLAGS} ${OPTON} $(SRCDIR)/execl.c
 
-	$(CC) -o $(PROGDIR)/looper.s ${CFLAGS} ${OPTON} -S $(SRCDIR)/looper.c
+$(PROGDIR)/dhry2.s: $(SRCDIR)/dhry_1.c $(SRCDIR)/dhry_2.c $(SRCDIR)/dhry.h
+	cd $(SRCDIR); $(CC) -S ${CFLAGS} -DHZ=${HZ} ${OPTON} dhry_1.c
+	cd $(SRCDIR); $(CC) -S ${CFLAGS} -DHZ=${HZ} ${OPTON} dhry_2.c
+	$(CC) -S $(PROGDIR)/dhry2.s ${CFLAGS} ${OPTON} $(SRCDIR)/dhry_1.o $(SRCDIR)/dhry_2.o
+	cd $(SRCDIR); rm -f dhry_1.o dhry_2.o
 
-	#$(CC) -o $(PROGDIR)/ubgears.s ${CFLAGS} ${OPTON} -S $(SRCDIR)/ubgears.c $(GL_LIBS)
+$(PROGDIR)/dhry2reg.s: $(SRCDIR)/dhry_1.c $(SRCDIR)/dhry_2.c $(SRCDIR)/dhry.h
+	cd $(SRCDIR); $(CC) -S ${CFLAGS} -DREG=register -DHZ=${HZ} ${OPTON} dhry_1.c
+	cd $(SRCDIR); $(CC) -S ${CFLAGS} -DREG=register -DHZ=${HZ} ${OPTON} dhry_2.c
+	$(CC) -S $(PROGDIR)/dhry2reg.s ${CFLAGS} ${OPTON} $(SRCDIR)/dhry_1.o $(SRCDIR)/dhry_2.o
+	cd $(SRCDIR); rm -f dhry_1.o dhry_2.o
+
+$(PROGDIR)/looper.s: $(SRCDIR)/looper.c
+	$(CC) -S $(PROGDIR)/looper.s ${CFLAGS} ${OPTON} $(SRCDIR)/looper.c
+
+$(PROGDIR)/ubgears.s: $(SRCDIR)/ubgears.c
+	$(CC) -S $(PROGDIR)/ubgears.s ${CFLAGS} ${OPTON} $(SRCDIR)/ubgears.c $(GL_LIBS)
 # Run the benchmarks and create the reports
 run:
 	sh ./Run

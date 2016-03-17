@@ -1,4 +1,11 @@
 download http://soft.vpser.net/test/unixbench/
+http://blog.csdn.net/gatieme/article/details/50912910
+增加了编译成汇编的Makefile信息,支持arm架构的编译
+使用make asm来编译, arm上不支持图形GUI测试
+请注MakeFile中的GRAPHIC_TESTS = defined可以开关编译GUI测试
+
+
+
 Version 5.1.2 -- 2007-12-26
 
 ================================================================
