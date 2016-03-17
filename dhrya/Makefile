@@ -26,11 +26,11 @@ whetstone:$(WHETSTONE_OBJS)
 	$(CC) -c $^ -o $@ $(CFLAGS) $(INC) $(DEFINES)
 
 __arm:
-	arm-linux-gcc -Wall -O3 dhry_1.c dhry_2.c times_b.c -o dhry -I./
-	arm-linux-gcc -Wall -O3 whetstone.c -o whetstone -lm
+	arm-linux-gcc -Wall -O3 dhry_1.c dhry_2.c times_b.c -S dhry -I./
+	arm-linux-gcc -Wall -O3 whetstone.c -S whetstone -lm
 __pc:
-	gcc -Wall  dhry_1.c dhry_2.c times_b.c -o dhry -I./
-	gcc -Wall  whetstone.c -o whetstone -lm
+	gcc -Wall  -O3 dhry_1.c dhry_2.c times_b.c -S dhry.s -I./
+	gcc -Wall  -O3 whetstone.c -S whetstone.s -lm
 clean:
 	rm $(DHRY_OBJS)
 	rm $(WHETSTONE_OBJS)
