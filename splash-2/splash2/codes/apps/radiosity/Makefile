@@ -6,6 +6,7 @@ HS = model.h parallel.h patch.h radiosity.h task.h
 
 include ../../Makefile.config
 
+
 CFLAGS := $(CFLAGS) -I./glibdumb -I./glibps
 
 #CCOPTS = -I -float -I/usr/include $(CFLAGS)
@@ -15,7 +16,7 @@ CFLAGS := $(CFLAGS) -I./glibdumb -I./glibps
 
 LOADLIBES = glibdumb/glib.a glibps/glibps.a
 
-$(TARGET): $(OBJS)
+$(TARGET): $(OBJS) $(LOADLIBES)
 	$(CC) $(OBJS) $(CFLAGS) $(LOADLIBES) -o $(TARGET) $(LDFLAGS)
 
 radiosity.h: patch.h model.h parallel.h task.h
@@ -29,3 +30,8 @@ display.c: display.C $(HS)
 visible.c: visible.C $(HS)
 rad_tools.c: rad_tools.C $(HS)
 room_model.c: room_model.C $(HS)
+
+glibdumb/glib.a :
+	cd ./glibdumb && make
+glibps/glibps.a :
+	cd ./glibps && make

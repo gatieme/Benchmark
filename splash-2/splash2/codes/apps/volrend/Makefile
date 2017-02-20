@@ -4,7 +4,7 @@ OBJS = adaptive.o file.o main.o map.o normal.o octree.o opacity.o option.o raytr
 include ../../Makefile.config
 
 CFLAGS := $(CFLAGS) -I./libtiff
-LDFLAGS := -L./libtiff $(LDFLAGS) -ltiff
+LDFLAGS := -L./libtiff -ltiff $(LDFLAGS)
 
 main.c:	main.C incl.h anl.h
 file.c:	file.C incl.h
